@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using StudyFlow.Models;
-namespace MyShop.Controllers; 
-
+namespace StudyFlow.Controllers;
 
 
 public class UserController : Controller
@@ -21,9 +20,13 @@ public class UserController : Controller
 
     //public IActionResultDetails()
 
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
 
 
- 
     public IActionResult Table()
     {
 
