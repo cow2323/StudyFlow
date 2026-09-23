@@ -8,19 +8,19 @@
     "net10.0": []
   },
   "packageFolders": {
-    "/Users/cow/.nuget/packages/": {}
+    "C:\\Users\\sadeg\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/cow/Documents/Skole/Høst26/Web Applications/Oblig/StudyFlow/StudyFlow/StudyFlow.csproj",
+      "projectUniqueName": "C:\\Users\\sadeg\\OneDrive\\Dokumenter\\web_app\\StudyFlow\\StudyFlow.csproj",
       "projectName": "StudyFlow",
-      "projectPath": "/Users/cow/Documents/Skole/Høst26/Web Applications/Oblig/StudyFlow/StudyFlow/StudyFlow.csproj",
-      "packagesPath": "/Users/cow/.nuget/packages/",
-      "outputPath": "/Users/cow/Documents/Skole/Høst26/Web Applications/Oblig/StudyFlow/StudyFlow/obj/",
+      "projectPath": "C:\\Users\\sadeg\\OneDrive\\Dokumenter\\web_app\\StudyFlow\\StudyFlow.csproj",
+      "packagesPath": "C:\\Users\\sadeg\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\sadeg\\OneDrive\\Dokumenter\\web_app\\StudyFlow\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/cow/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\sadeg\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -70,7 +70,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.400/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
