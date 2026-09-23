@@ -13,7 +13,10 @@ namespace StudyFlow.Models
 
         
         
-        //public DbSet<Users> Users {get; set;}
+        public DbSet<User> Users {get; set;}
+
+        public DbSet<Booking> Bookings {get; set;}
+        public DbSet<Room> Rooms {get; set;}
         
         }
 

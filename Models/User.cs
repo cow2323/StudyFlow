@@ -8,7 +8,7 @@ namespace StudyFlow.Models
 
         public string Email { get; set; } = string.Empty;
 
-       // kan være null, passord kan legges til senere .
-        public string? PasswordHash { get; set; }
+        //Not encrypted password 
+        public string PasswordHash { get; set; } = string.Empty;
     }
 }
