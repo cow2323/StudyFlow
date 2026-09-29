@@ -1,0 +1,52 @@
+@model IEnumerable<StudyFlow.Models.Booking>
+
+@{
+    ViewData["Title"] = "Bookings";
+}
+
+<h1>Bookings</h1>
+
+<a asp-controller="Booking"
+   asp-action="Create"
+   class="btn btn-primary mb-3">
+    Create New Booking
+</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Room</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Created</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.Id</td>
+                <td>@booking.RoomId</td>
+                <td>@booking.StartTime</td>
+                <td>@booking.EndTime</td>
+                <td>@booking.CreatedAt</td>
+
+                <td>
+                    <form asp-controller="Booking"
+                          asp-action="Delete"
+                          asp-route-id="@booking.Id"
+                          method="post">
+
+                        <button type="submit"
+                                class="btn btn-danger btn-sm">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

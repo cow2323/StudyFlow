@@ -1,0 +1,71 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container py-5">
+
+    <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+        <div class="container-fluid py-4">
+
+            <h1 class="display-4 fw-bold">
+                Welcome to StudyFlow
+            </h1>
+
+            <p class="col-md-8 fs-5">
+                Find study rooms, create bookings and organize
+                your study sessions in one place.
+            </p>
+
+            <a asp-controller="Room"
+               asp-action="Index"
+               class="btn btn-primary btn-lg me-2">
+                View Rooms
+            </a>
+
+            <a asp-controller="Booking"
+               asp-action="Index"
+               class="btn btn-outline-secondary btn-lg">
+                My Bookings
+            </a>
+
+        </div>
+    </div>
+
+    <div class="row text-center">
+
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Find a Room</h3>
+                    <p class="card-text">
+                        Browse available study rooms and check their capacity.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Book a Room</h3>
+                    <p class="card-text">
+                        Choose a room, date and time for your study session.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Manage Bookings</h3>
+                    <p class="card-text">
+                        Keep track of your bookings and cancel them when needed.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
