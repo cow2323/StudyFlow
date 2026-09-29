@@ -1,0 +1,10 @@
+# .NET build files
+bin/
+obj/
+
+# Local database
+StudyFlowDatabase.db
+
+# Visual Studio / local user files
+.vs/
+*.user
