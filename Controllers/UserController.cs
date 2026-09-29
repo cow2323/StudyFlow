@@ -8,58 +8,165 @@ namespace StudyFlow.Controllers;
 public class UserController : Controller
 {
 
-    private readonly StudyFlowDbContext _context;
+    private readonly StudyFlowDbContext _dBcontext;
 
     public UserController(StudyFlowDbContext context)
     {
-        _context = context;
+        _dBcontext = context;
     }
 
 
-    //public IActionResult Grid()
 
-    //public IActionResultDetails()
+    [HttpPost]
+    public IActionResult Login(String Email, String PasswordHash)
+    {
+        //Simple Validation Form handling logins
+        List<User> allUsers = _dBcontext.Users.ToList();
+
+        User selected;
+
+        foreach(var user in allUsers)
+        {
+            if (user.Email == Email && user.PasswordHash == PasswordHash)
+            {
+                
+                Console.WriteLine($"User Found: \n {user.Email}, \n {user.Name}");
+
+                selected = user; 
+
+                // Logic For User views goes here
+                //this needs a hash value / decryption protocol 
+
+                 return View(nameof(Login));
+            }        
+        
+        }
+
+
+    Console.WriteLine("User Not found"); 
+
+     return View(nameof(Login));
+
+
+    }
+
+
 
     [HttpGet]
     public IActionResult Login()
     {
         return View();
     }
+  
 
 
-    public IActionResult Table()
-    {
-
-        //Midlertidig løsning for å vise bookings i tabellen.
-        var bookings = new List<String>();
-
-        var sampleBooking = "Mandag 1 sept kl 10:00-11:00, Rom 101";
-        var sampleBooking2 = "Tirsdag 2 sept kl 12:00-13:00, Rom 102";
-
-        bookings.Add(sampleBooking);
-        bookings.Add(sampleBooking2);
-        return View(bookings);
-    }
 
     [HttpGet]
     public IActionResult Create()
     {
-        return View();
+        
+        return View(); 
     }
+ 
 
     [HttpPost]
-    public IActionResult Create(User user)
+    public IActionResult Create(User newUser)
+    {
+
+        Console.WriteLine($"Attempting to create user: {newUser.Name}, {newUser.Email}");
+
+        try{
+
+            if (ModelState.IsValid)
+            {
+                _dBcontext.Users.Add(newUser);
+                _dBcontext.SaveChanges();
+
+                Console.WriteLine($"User created: {newUser.Name}, {newUser.Email}");
+                return View(nameof(Login));
+
+            }}
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating user: {ex.Message}");
+            ModelState.AddModelError(string.Empty, "An error occurred while creating the user.");
+        }
+
+     Console.WriteLine("User Creation failed. Model state is invalid.");
+    return View(nameof(Login));
+    }
+
+
+
+
+    [HttpGet]
+    public IActionResult Update(int id)
+    {
+        var user = _dBcontext.Users.Find(id);
+        if (user == null)
+        {
+            
+            return NotFound();
+        }
+
+        return View(user); 
+    }
+    
+    [HttpPost]
+    public IActionResult Update(User user)
     {
         if (ModelState.IsValid)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
-            return RedirectToAction(nameof(Table));
+            try{
+            _dBcontext.Users.Update(_dBcontext.Users.Find(user.Id));
+            _dBcontext.SaveChanges();
+            return RedirectToAction(nameof(Login));
+            }
 
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Something went wrong when updating user {user.Id}");
+                
+            }            
+        }
+
+        return View();
+        
+    }
+
+
+    [HttpGet]
+    public IActionResult Delete(int id)
+    {
+        var user = _dBcontext.Users.Find(id);
+        if (user == null)
+        {
+            return NotFound();
         }
 
         return View(user);
     }
+
+
+    [HttpPost]
+    public IActionResult DeleteConfirmed(int id)
+    {
+        var user = _dBcontext.Users.Find(id);
+        if (user == null)
+        {
+            return NotFound(); 
+        }
+
+        _dBcontext.Users.Remove(user);
+        _dBcontext.SaveChanges();
+        return RedirectToAction(nameof(Login));
+
+
+    }
+
+
+
+
 
 
 }
