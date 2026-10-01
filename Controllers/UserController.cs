@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using StudyFlow.Models;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 namespace StudyFlow.Controllers;
-
 
 public class UserController : Controller
 {
@@ -18,10 +20,10 @@ public class UserController : Controller
 
 
     [HttpPost]
-    public IActionResult Login(String Email, String PasswordHash)
+    public async Task <IActionResult> Login(String Email, String PasswordHash)
     {
         //Simple Validation Form handling logins
-        List<User> allUsers = _dBcontext.Users.ToList();
+        List<User> allUsers = await _dBcontext.Users.ToListAsync();
 
         User selected;
 
@@ -29,6 +31,11 @@ public class UserController : Controller
         {
             if (user.Email == Email && user.PasswordHash == PasswordHash)
             {
+
+                //add UserID to session
+
+                HttpContext.Session.SetInt32("UserId", user.Id); 
+
                 
                 Console.WriteLine($"User Found: \n {user.Email}, \n {user.Name}");
 
@@ -37,7 +44,7 @@ public class UserController : Controller
                 // Logic For User views goes here
                 //this needs a hash value / decryption protocol 
 
-                 return View(nameof(Login));
+                 return RedirectToAction("Index", "Booking");
             }        
         
         }
@@ -70,19 +77,19 @@ public class UserController : Controller
  
 
     [HttpPost]
-    public IActionResult Create(User newUser)
+    public async Task<IActionResult> Create(User newUser)
     {
-
-        Console.WriteLine($"Attempting to create user: {newUser.Name}, {newUser.Email}");
 
         try{
 
-            if (ModelState.IsValid)
+            var allUsers = await _dBcontext.Users.ToListAsync();
+
+
+            // Check Model is valid and email is unique
+            if (ModelState.IsValid && !allUsers.Any(u => u.Email == newUser.Email))
             {
                 _dBcontext.Users.Add(newUser);
                 _dBcontext.SaveChanges();
-
-                Console.WriteLine($"User created: {newUser.Name}, {newUser.Email}");
                 return View(nameof(Login));
 
             }}

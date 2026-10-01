@@ -38,12 +38,25 @@ namespace StudyFlow.Controllers
         public async Task<IActionResult> Create(
             [Bind("RoomId,Subject,Topic,StartTime,EndTime")] Booking booking)
         {
-            if (booking.EndTime <= booking.StartTime)
+
+
+            int? sessionUserId = HttpContext.Session.GetInt32("UserId");
+
+            if (sessionUserId == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            booking.UserId = sessionUserId.Value;
+
+
+            try{if (booking.EndTime <= booking.StartTime)
             {
                 ModelState.AddModelError(
                     nameof(Booking.EndTime),
                     "Sluttid må være etter starttid.");
-            }
+            }}
+            catch (Exception ex){Console.WriteLine($"Error: {ex.Message}");}
 
             var overlap = await _context.Bookings.AnyAsync(b =>
                 b.RoomId == booking.RoomId &&
