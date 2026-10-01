@@ -16,10 +16,5 @@ namespace StudyFlow.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        // Kan være null dersom brukerdata ikke er lastet inn fra databasen.
-        public User? User { get; set; }
-
-        // Kan være null dersom romdata ikke er lastet inn fra databasen.
-        public Room? Room { get; set; }
     }
 }
