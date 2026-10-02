@@ -29,6 +29,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage(); 
+    DbInit.Seed(app);
 }
 
 app.UseSession();
