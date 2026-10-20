@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudyFlow.Models;
+using StudyFlow.ViewModels;
 
 namespace StudyFlow.Controllers
 {
@@ -26,7 +27,7 @@ namespace StudyFlow.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new Booking
+            return View(new BookingCreateViewModel
             {
                 StartTime = DateTime.Now.AddHours(1),
                 EndTime = DateTime.Now.AddHours(2)
@@ -35,45 +36,55 @@ namespace StudyFlow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("RoomId,Subject,Topic,StartTime,EndTime")] Booking booking)
+        public async Task<IActionResult> Create(BookingCreateViewModel model)
         {
+            int? userId = HttpContext.Session.GetInt32("UserId");
 
-
-            int? sessionUserId = HttpContext.Session.GetInt32("UserId");
-
-            if (sessionUserId == null)
+            if (userId == null)
             {
                 return RedirectToAction("Login", "User");
             }
-
-            booking.UserId = sessionUserId.Value;
-
-
-            try{if (booking.EndTime <= booking.StartTime)
+            if (model.StartTime < DateTime.Now)
             {
                 ModelState.AddModelError(
-                    nameof(Booking.EndTime),
+                    nameof(model.StartTime),
+                    "Du kan ikke booke et rom i fortiden.");
+            }
+            
+            if (model.EndTime <= model.StartTime)
+            {
+                ModelState.AddModelError(
+                    nameof(model.EndTime),
                     "Sluttid må være etter starttid.");
-            }}
-            catch (Exception ex){Console.WriteLine($"Error: {ex.Message}");}
+            }
 
-            var overlap = await _context.Bookings.AnyAsync(b =>
-                b.RoomId == booking.RoomId &&
-                b.StartTime < booking.EndTime &&
-                booking.StartTime < b.EndTime);
-
-            if (overlap)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(
-                    nameof(Booking.RoomId),
-                    "Rommet er allerede booket i dette tidsrommet.");
+                bool overlap = await _context.Bookings.AnyAsync(b =>
+                    b.RoomId == model.RoomId &&
+                    b.StartTime < model.EndTime &&
+                    model.StartTime < b.EndTime);
+
+                if (overlap)
+                {
+                    ModelState.AddModelError(
+                        nameof(model.RoomId),
+                        "Rommet er allerede booket.");
+                }
             }
 
             if (!ModelState.IsValid)
             {
-                return View(booking);
+                return View(model);
             }
+
+            var booking = new Booking
+            {
+                UserId = userId.Value,
+                RoomId = model.RoomId,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime
+            };
 
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();

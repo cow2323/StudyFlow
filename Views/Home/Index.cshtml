@@ -1,47 +1,65 @@
 @{
     ViewData["Title"] = "Home";
+    Layout = "_DashboardLayout";
 }
 
 <div class="container py-5">
 
-    <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
-        <div class="container-fluid py-4">
+    <!-- Welcome Section -->
+    <div class="p-4 mb-4 bg-white rounded-4 shadow-sm">
 
-            <h1 class="display-4 fw-bold">
-                Welcome to StudyFlow
-            </h1>
+        <div class="row align-items-center g-4">
 
-            <p class="col-md-8 fs-5">
-                Find study rooms, create bookings and organize
-                your study sessions in one place.
-            </p>
+            <!-- Left: Text -->
+            <div class="col-lg-6">
 
-            <a asp-controller="Room"
-               asp-action="Index"
-               class="btn btn-primary btn-lg me-2">
-                View Rooms
-            </a>
+                <h1 class="fw-bold mb-3" style="color: #172B4D;">
+                    Your space to study together.
+                </h1>
 
-            <a asp-controller="Booking"
-               asp-action="Index"
-               class="btn btn-outline-secondary btn-lg">
-                My Bookings
-            </a>
+                <p class="fs-5 text-secondary mb-4">
+                    Find study rooms, create bookings
+                    and organize your study sessions
+                    in one place.
+                </p>
+
+                <a asp-controller="Room" asp-action="Index" class="btn btn-primary btn-lg me-2">
+                    View Rooms
+                </a>
+
+                <a asp-controller="Booking" asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                    My Bookings
+                </a>
+
+            </div>
+
+            <!-- Right: Image -->
+            <div class="col-lg-6">
+
+                <img src="~/images/Home_side.png" alt="Modern study room"
+                     class="img-fluid rounded-4 w-100" style="height: 350px; object-fit: cover;" />
+
+            </div>
 
         </div>
+
     </div>
 
     <div class="row text-center">
 
         <div class="col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h3 class="card-title">Find a Room</h3>
-                    <p class="card-text">
-                        Browse available study rooms and check their capacity.
-                    </p>
+            <a asp-controller="Room" asp-action="Index" class="text-decoration-none text-dark">
+
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title">Find a Room</h3>
+                        <p class="card-text">
+                            Browse available study rooms and check their capacity.
+                        </p>
+                    </div>
                 </div>
-            </div>
+
+            </a>
         </div>
 
         <div class="col-md-4 mb-3">
@@ -58,9 +76,10 @@
         <div class="col-md-4 mb-3">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h3 class="card-title">Manage Bookings</h3>
+                    <h3 class="card-title">Study Sessions</h3>
                     <p class="card-text">
-                        Keep track of your bookings and cancel them when needed.
+                        Create study sessions, collaborate
+                        with other students and study together.
                     </p>
                 </div>
             </div>

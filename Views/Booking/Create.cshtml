@@ -1,4 +1,4 @@
-@model StudyFlow.Models.Booking
+@model StudyFlow.ViewModels.BookingCreateViewModel
 
 @{
     ViewData["Title"] = "Create Booking";
@@ -14,29 +14,46 @@
         <span asp-validation-for="RoomId" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
+    @* <div class="mb-3">
         <label asp-for="StartTime" class="form-label"></label>
         <input asp-for="StartTime"
                type="datetime-local"
                class="form-control" />
         <span asp-validation-for="StartTime" class="text-danger"></span>
-    </div>
+    </div> *@
 
     <div class="mb-3">
-        <label asp-for="EndTime" class="form-label"></label>
-        <input asp-for="EndTime"
-               type="datetime-local"
+        <label asp-for="StartTime" class="form-label">
+            Start Time
+        </label>
+
+        <input asp-for="StartTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" step="60"
                class="form-control" />
+
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+
+    @* <div class="mb-3">
+        <label asp-for="EndTime" class="form-label"></label>
+        <input asp-for="EndTime" type="datetime-local" class="form-control" />
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div> *@
+    <div class="mb-3">
+        <label asp-for="EndTime" class="form-label">
+            End Time
+        </label>
+
+        <input asp-for="EndTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" step="60"
+               class="form-control" />
+
         <span asp-validation-for="EndTime" class="text-danger"></span>
     </div>
 
-    <button type="submit"
-            class="btn btn-primary">
+    <button type="submit" class="btn btn-primary">
         Create Booking
     </button>
 
-    <a asp-action="Index"
-       class="btn btn-secondary">
+    <a asp-action="Index" class="btn btn-secondary">
         Back
     </a>
 

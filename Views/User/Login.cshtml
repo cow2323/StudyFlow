@@ -1,79 +1,101 @@
-@model StudyFlow.Models.User 
+@model StudyFlow.Models.User
 
 
-<h1>Login to StudyFlow</h1>
+<div class="row g-0 shadow-lg rounded-4 overflow-hidden my-5">
 
-<!-- Tab Panes -->
+    <div class="col-lg-5 bg-primary bg-gradient text-white p-5
+        d-flex flex-column justify-content-center">
 
-<ul class="nav nav-tabs" id="loginTabs" role=tablist> 
+        <h2 class="fw-bold">🎓 StudyFlow</h2>
 
-    <li class=nav-item role=presentation>
-        <button class="nav-link active" id="loginTab" data-bs-toggle="tab"  data-bs-target="#collapseLogin" type="button" aria-expanded="true" aria-controls="collapseLogin" aria-selected="true">Login</button>
-    </li>
+        <p class="lead">
+            Your space to study together.
+        </p>
 
-    <li class=nav-item role=presentation>
-        <a class="nav-link" id="createUserTab" data-bs-toggle="tab" href="/Create" data-bs-target="#collapseCreateUser" type="button" aria-expanded="false" aria-controls="collapseCreateUser" aria-selected="false">Create User</a>
-    </li>
+    </div>
 
-</ul>
+    <div class="col-lg-7 bg-white p-5">
 
+        <h2 class="fw-bold mb-4">Welcome back</h2>
 
-<div class="tab-content" id="loginTabContent">
-        <div class="tab-pane fade show active" id="collapseLogin" role="tabpanel" aria-labelledby="loginTab">
+        <!-- Tab Panes -->
 
-        <!-- Form for login -->
-            <form asp-controller="User" asp-action="Login" method="post">
+        <ul class="nav nav-tabs" id="loginTabs" role=tablist>
 
+            <li class=nav-item role=presentation>
+                <button class="nav-link active" id="loginTab" data-bs-toggle="tab" data-bs-target="#collapseLogin"
+                        type="button" aria-expanded="true" aria-controls="collapseLogin" aria-selected="true">Login</button>
+            </li>
 
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label">Email</label>
-                    <input asp-for="Email" type="email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger small" ></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for"PasswordHash" class="form-label">Password</label>
-                    <input asp-for="PasswordHash" type="password" class="form-control" />
-                    <span asp-validation-for="PasswordHash" class="text-danger small" ></span>
-                </div>
-
-                <button type="submit" class="btn btn-primary">
-                    Login
+            <li class=nav-item role=presentation>
+                <button class="nav-link" id="createUserTab" data-bs-toggle="tab" data-bs-target="#collapseCreateUser"
+                        type="button" role="tab" aria-controls="collapseCreateUser" aria-selected="false">
+                    Register
                 </button>
-            </form>
-        </div>
+            </li>
+        </ul>
 
 
-    <div class="tab-pane fade" id="collapseCreateUser" role="tabpanel" aria-labelledby="createUserTab">
+        <div class="tab-content" id="loginTabContent">
+            <div class="tab-pane fade show active" id="collapseLogin" role="tabpanel" aria-labelledby="loginTab">
+
+                <!-- Form for login -->
+                <form asp-controller="User" asp-action="Login" method="post">
+
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" type="email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="PasswordHash" class="form-label">Password</label>
+                        <input asp-for="PasswordHash" type="password" class="form-control" />
+                        <span asp-validation-for="PasswordHash" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Login
+                    </button>
+                </form>
+            </div>
+
+
+            <div class="tab-pane fade" id="collapseCreateUser" role="tabpanel" aria-labelledby="createUserTab">
                 
-                <form asp-controller="User" asp-action="Create" method="post" >
+                <form asp-controller="User" asp-action="Create" method="post">
 
 
-                        <div class=mb-3>
-                            <label asp-for="Name" class="form-label">Name</label>
-                            <input asp-for="Name" type="text" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger small" ></span>
+                    <div class=mb-3>
+                        <label asp-for="Name" class="form-label">Name</label>
+                        <input asp-for="Name" type="text" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
                         
-                        </div>
+                    </div>
 
 
-                        <div class=mb-3>
-                            <label asp-for="Email" class="form-label">Email</label>
-                            <input asp-for="Email" type="email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger small" ></span>
-                        </div>
+                    <div class=mb-3>
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" type="email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
 
-                        <div class=mb-3>
-                            <label asp-for="PasswordHash" class="form-label">Password</label>
-                            <input asp-for="PasswordHash" type="password" class="form-control" />
-                            <span asp-validation-for="PasswordHash" class="text-danger small" ></span>
-                        </div>
+                    <div class=mb-3>
+                        @* <label asp-for="PasswordHash" class="form-label">Password</label> *@
+                        <label asp-for="PasswordHash" class="form-label">Password</label>
+                        <input asp-for="PasswordHash" type="password" class="form-control" />
+                        <span asp-validation-for="PasswordHash" class="text-danger small"></span>
+                    </div>
 
                     <button type="submit" class="btn btn-primary">
                         Create Account
                     </button>
-                    </form>
+                </form>
+
+            </div>
+                
+        </div>
 
     </div>
-                
-</div>      
+</div>
