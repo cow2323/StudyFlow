@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudyFlow.Models;
@@ -15,6 +16,7 @@ namespace StudyFlow.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var bookings = await _context.Bookings
@@ -25,6 +27,7 @@ namespace StudyFlow.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Create()
         {
             return View(new BookingCreateViewModel
@@ -35,6 +38,7 @@ namespace StudyFlow.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookingCreateViewModel model)
         {
@@ -93,6 +97,7 @@ namespace StudyFlow.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
             var booking = await _context.Bookings.FindAsync(id);
@@ -107,6 +112,7 @@ namespace StudyFlow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(
             int id,
             [Bind("Id,RoomId,StartTime,EndTime")] Booking booking)
@@ -159,6 +165,7 @@ namespace StudyFlow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var booking = await _context.Bookings.FindAsync(id);

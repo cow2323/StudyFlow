@@ -1,5 +1,4 @@
-@model StudyFlow.Models.User
-
+@model StudyFlow.ViewModels.AuthViewModel
 
 <div class="row g-0 shadow-lg rounded-4 overflow-hidden my-5">
 
@@ -40,58 +39,14 @@
             <div class="tab-pane fade show active" id="collapseLogin" role="tabpanel" aria-labelledby="loginTab">
 
                 <!-- Form for login -->
-                <form asp-controller="User" asp-action="Login" method="post">
-
-
-                    <div class="mb-3">
-                        <label asp-for="Email" class="form-label">Email</label>
-                        <input asp-for="Email" type="email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger small"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="PasswordHash" class="form-label">Password</label>
-                        <input asp-for="PasswordHash" type="password" class="form-control" />
-                        <span asp-validation-for="PasswordHash" class="text-danger small"></span>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        Login
-                    </button>
-                </form>
+                <partial name="_Login"  model= "Model.Login"/>
             </div>
 
 
             <div class="tab-pane fade" id="collapseCreateUser" role="tabpanel" aria-labelledby="createUserTab">
+                <!--Form For Registration--->
                 
-                <form asp-controller="User" asp-action="Create" method="post">
-
-
-                    <div class=mb-3>
-                        <label asp-for="Name" class="form-label">Name</label>
-                        <input asp-for="Name" type="text" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger small"></span>
-                        
-                    </div>
-
-
-                    <div class=mb-3>
-                        <label asp-for="Email" class="form-label">Email</label>
-                        <input asp-for="Email" type="email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger small"></span>
-                    </div>
-
-                    <div class=mb-3>
-                        @* <label asp-for="PasswordHash" class="form-label">Password</label> *@
-                        <label asp-for="PasswordHash" class="form-label">Password</label>
-                        <input asp-for="PasswordHash" type="password" class="form-control" />
-                        <span asp-validation-for="PasswordHash" class="text-danger small"></span>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        Create Account
-                    </button>
-                </form>
+                <partial name="_Register"  model="Model.Registration"/>
 
             </div>
                 
