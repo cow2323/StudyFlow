@@ -1,7 +1,106 @@
+@model IEnumerable<StudyFlow.Models.Room>
+
 @{
     ViewData["Title"] = "Study Rooms";
 }
 
-<h1>Available Study Rooms</h1>
+<main class="container py-4">
 
-<p>Here you can view available study rooms.</p>
+    <header class="mb-4">
+        <h1 class="fw-bold">Study Rooms</h1>
+        <p class="text-muted">
+            Find and book available study rooms.
+        </p>
+    </header>
+
+    <section class="mb-4">
+        <form method="get"
+              asp-controller="Room"
+              asp-action="Index"
+              class="row g-3">
+
+            <div class="col-md-6">
+                <label for="searchRoom" class="form-label">
+                    Search rooms
+                </label>
+
+                <input id="searchRoom"
+                       name="searchTerm"
+                       type="text"
+                       class="form-control"
+                       placeholder="Search room..." />
+            </div>
+
+            <div class="col-md-3">
+                <label for="selectedDate" class="form-label">
+                    Date
+                </label>
+
+                <input id="selectedDate"
+                       name="selectedDate"
+                       type="date"
+                       class="form-control" />
+            </div>
+
+        </form>
+    </section>
+
+    <section class="row g-4">
+
+        @foreach (var room in Model)
+        {
+            <article class="col-md-6 col-lg-4">
+
+                <div class="card h-100 shadow-sm">
+
+                    <div class="card-body">
+
+                        <header class="d-flex justify-content-between align-items-start mb-3">
+
+                            <h2 class="h5 mb-0">
+                                @room.Name
+                            </h2>
+
+                            <span class="badge bg-success">
+                                Available
+                            </span>
+
+                        </header>
+
+                        <p class="mb-2">
+                            <strong>Capacity:</strong>
+                            @room.Capacity
+                        </p>
+
+                        <p class="mb-2">
+                            <strong>Location:</strong>
+                            @room.Location
+                        </p>
+
+                        @if (!string.IsNullOrWhiteSpace(room.Description))
+                        {
+                            <p class="text-muted">
+                                @room.Description
+                            </p>
+                        }
+
+                    </div>
+
+                    <footer class="card-footer bg-white border-0">
+
+                        <a asp-controller="Booking"
+                           asp-action="Create"
+                           class="btn btn-primary w-100">
+                            View Details
+                        </a>
+
+                    </footer>
+
+                </div>
+
+            </article>
+        }
+
+    </section>
+
+</main>
