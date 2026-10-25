@@ -52,6 +52,20 @@
             <article class="col-md-6 col-lg-4">
 
                 <div class="card h-100 shadow-sm">
+                    @{
+                      var imagePath = room.Id switch
+                   {
+                      1 => "~/images/Study rooms_side/study room1.jpg",
+                      2 => "~/images/Study rooms_side/study room2.jpg",
+                      3 => "~/images/Study rooms_side/study room3.jpg",
+                      _ => "~/images/Study rooms_side/study room1.jpg"
+               };
+           }
+
+                    <img src="@Url.Content(imagePath)"
+                     class="card-img-top"
+                     alt="@room.Name"
+                     style="height: 220px; object-fit: cover;" />
 
                     <div class="card-body">
 
