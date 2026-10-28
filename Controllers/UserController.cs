@@ -1,179 +1,121 @@
-using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity; 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using StudyFlow.Models;
-using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-namespace StudyFlow.Controllers;
+using StudyFlow.ViewModels;
 
-public class UserController : Controller
+namespace StudyFlow.Controllers; 
+
+public class UserController:Controller
 {
+    private readonly UserManager<IdentityUser> _userManager; 
 
-    private readonly StudyFlowDbContext _dBcontext;
+    private readonly SignInManager<IdentityUser> _signInManager;
 
-    public UserController(StudyFlowDbContext context)
+
+    public UserController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
     {
-        _dBcontext = context;
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
 
+    //Get: /User/Register
 
+    [HttpGet]
+    public IActionResult Register() => View("Login", new AuthViewModel());
 
+    //POST: /User/Register
     [HttpPost]
-    public async Task <IActionResult> Login(String Email, String PasswordHash)
-    {
-        //Simple Validation Form handling logins
-        List<User> allUsers = await _dBcontext.Users.ToListAsync();
-
-        User selected;
-
-        foreach(var user in allUsers)
-        {
-            if (user.Email == Email && user.PasswordHash == PasswordHash)
-            {
-
-                //add UserID to session
-
-                HttpContext.Session.SetInt32("UserId", user.Id); 
-
-                
-                Console.WriteLine($"User Found: \n {user.Email}, \n {user.Name}");
-
-                selected = user; 
-
-                // Logic For User views goes here
-                //this needs a hash value / decryption protocol 
-
-                 return RedirectToAction("Index", "Booking");
-            }        
-        
-        }
-
-
-    Console.WriteLine("User Not found"); 
-
-     return View(nameof(Login));
-
-
-    }
-
-
-
-    [HttpGet]
-    public IActionResult Login()
-    {
-        return View();
-    }
-  
-
-
-
-    [HttpGet]
-    public IActionResult Create()
+    public async Task<IActionResult> Register(RegisterViewModel model)
     {
         
-        return View(); 
-    }
- 
-
-    [HttpPost]
-    public async Task<IActionResult> Create(User newUser)
-    {
-
-        try{
-
-            var allUsers = await _dBcontext.Users.ToListAsync();
-
-
-            // Check Model is valid and email is unique
-            if (ModelState.IsValid && !allUsers.Any(u => u.Email == newUser.Email))
-            {
-                _dBcontext.Users.Add(newUser);
-                _dBcontext.SaveChanges();
-                return View(nameof(Login));
-
-            }}
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error creating user: {ex.Message}");
-            ModelState.AddModelError(string.Empty, "An error occurred while creating the user.");
-        }
-
-     Console.WriteLine("User Creation failed. Model state is invalid.");
-    return View(nameof(Login));
-    }
-
-
-
-
-    [HttpGet]
-    public IActionResult Update(int id)
-    {
-        var user = _dBcontext.Users.Find(id);
-        if (user == null)
+        if(ModelState.IsValid)
         {
             
-            return NotFound();
-        }
+            var user = new IdentityUser {UserName = model.UserName, Email= model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password);
 
-        return View(user); 
-    }
-    
-    [HttpPost]
-    public IActionResult Update(User user)
-    {
-        if (ModelState.IsValid)
-        {
-            try{
-            _dBcontext.Users.Update(_dBcontext.Users.Find(user.Id));
-            _dBcontext.SaveChanges();
-            return RedirectToAction(nameof(Login));
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, isPersistent:false);
+
+
+                //DEBUG LINE
+                Console.WriteLine("Success Reg");
+                return RedirectToAction("Index", "Home"); 
             }
 
-            catch(Exception ex)
+            foreach (var error in result.Errors)
             {
-                Console.WriteLine($"Something went wrong when updating user {user.Id}");
-                
-            }            
+
+            //DEBUG LINE
+                Console.WriteLine(" Something wrong in registration: ");
+                ModelState.AddModelError(string.Empty, error.Description); 
+            }
+
         }
 
-        return View();
-        
+
+            return View("Login", new AuthViewModel {Registration = model} ); 
+
     }
 
+
+    // GET: /User/Login
 
     [HttpGet]
-    public IActionResult Delete(int id)
+    public IActionResult Login(string? returnUrl = null) => View(new AuthViewModel {ReturnUrl = returnUrl});
+
+
+
+    //POST: /User/Login
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
     {
-        var user = _dBcontext.Users.Find(id);
-        if (user == null)
+        //Default to home page if ReturnUrl is NULL or Empty
+        /*string targetUrl = !string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl)
+            ? model.ReturnUrl
+            : Url.Action("Index","Home" )?? "~/";
+*/
+            if (ModelState.IsValid)
         {
-            return NotFound();
+            var user = await  _userManager.FindByEmailAsync(model.Email);
+
+            if (user != null){
+
+
+            var result = await _signInManager.PasswordSignInAsync(
+                user.UserName!, 
+                //model.Email, 
+                model.Password, 
+                model.RememberMe, 
+                lockoutOnFailure: false
+            );
+            if (result.Succeeded)
+            {
+
+            //DEBUG LINE
+                Console.WriteLine("Success Login");
+                return RedirectToAction("Index", "Home"); 
+            }}
+
+
+
+            ModelState.AddModelError(string.Empty, "Invalid Login Attempt"); 
+            
+            //DEBUG LINE
+            Console.WriteLine("Something wenbt wrong in login ");
         }
 
-        return View(user);
+        return View(new AuthViewModel {Login= model, ReturnUrl = returnUrl}); 
     }
 
+
+
+    //POST: /Account/Logout 
 
     [HttpPost]
-    public IActionResult DeleteConfirmed(int id)
+    public async Task <IActionResult> Logout()
     {
-        var user = _dBcontext.Users.Find(id);
-        if (user == null)
-        {
-            return NotFound(); 
-        }
-
-        _dBcontext.Users.Remove(user);
-        _dBcontext.SaveChanges();
-        return RedirectToAction(nameof(Login));
-
-
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home"); 
     }
-
-
-
-
-
-
 }

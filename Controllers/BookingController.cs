@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudyFlow.Models;
@@ -8,13 +10,16 @@ namespace StudyFlow.Controllers
     public class BookingController : Controller
     {
         private readonly StudyFlowDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public BookingController(StudyFlowDbContext context)
+        public BookingController(UserManager<IdentityUser> userManager, StudyFlowDbContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var bookings = await _context.Bookings
@@ -25,8 +30,11 @@ namespace StudyFlow.Controllers
         }
 
 
+
         [HttpGet]
+        [Authorize]
         public IActionResult Create(int? roomId)
+
         {
             if (!roomId.HasValue || roomId.Value <= 0)
             {
@@ -43,12 +51,23 @@ namespace StudyFlow.Controllers
 
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookingCreateViewModel model)
         {
-            int? userId = HttpContext.Session.GetInt32("UserId");
 
-            if (userId == null)
+
+            //Get User 
+
+
+           string? userId = _userManager.GetUserId(User);
+
+
+
+
+            //If USer is still undefined we want user to login
+
+            if (string.IsNullOrEmpty(userId))
             {
                 return RedirectToAction("Login", "User");
             }
@@ -88,7 +107,7 @@ namespace StudyFlow.Controllers
 
             var booking = new Booking
             {
-                UserId = userId.Value,
+                UserId = userId,
                 RoomId = model.RoomId,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime
@@ -101,6 +120,7 @@ namespace StudyFlow.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
             var booking = await _context.Bookings.FindAsync(id);
@@ -115,6 +135,7 @@ namespace StudyFlow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(
             int id,
             [Bind("Id,RoomId,StartTime,EndTime")] Booking booking)
@@ -167,6 +188,7 @@ namespace StudyFlow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var booking = await _context.Bookings.FindAsync(id);

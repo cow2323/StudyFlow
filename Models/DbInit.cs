@@ -16,7 +16,7 @@ namespace StudyFlow.Models
         
 
 
-        if(!context.Users.Any()){
+        /*if(!context.Users.Any()){
 
             var users = new List<User>
             {
@@ -29,7 +29,7 @@ namespace StudyFlow.Models
             context.SaveChanges();
 
 
-        }
+        }*/
 
 
         if (!context.Rooms.Any())
