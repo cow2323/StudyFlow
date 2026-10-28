@@ -44,16 +44,20 @@ namespace StudyFlow.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookingCreateViewModel model)
-        {     string userId = "";
+        {    
 
-            try {userId = _userManager.GetUserId(User);}
-            catch (Exception e){Console.WriteLine(e);}
 
-            Console.WriteLine($"USER ID: {userId}");
+            //Get User 
+
+
+            userId = _userManager.GetUserId(User);
             
-            //HttpContext.Session.GetInt32("UserId");
 
-            if (userId == "")
+           
+
+           //If USer is still undefined we want user to login
+
+            if (string.isNullOrEmpty(userId))
             {
                 return RedirectToAction("Login", "User");
             }
