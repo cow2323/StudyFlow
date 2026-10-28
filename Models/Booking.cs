@@ -5,7 +5,7 @@ namespace StudyFlow.Models
         public int Id { get; set; }
 
         // Kobler bookingen til brukeren som opprettet den.
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         // Kobler bookingen til rommet som er booket.
         public int RoomId { get; set; }
