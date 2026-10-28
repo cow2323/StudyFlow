@@ -24,15 +24,23 @@ namespace StudyFlow.Controllers
             return View(bookings);
         }
 
+
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create(int? roomId)
         {
+            if (!roomId.HasValue || roomId.Value <= 0)
+            {
+                return RedirectToAction("Index", "Room");
+            }
+
             return View(new BookingCreateViewModel
             {
+                RoomId = roomId.Value,
                 StartTime = DateTime.Now.AddHours(1),
                 EndTime = DateTime.Now.AddHours(2)
             });
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -50,7 +58,7 @@ namespace StudyFlow.Controllers
                     nameof(model.StartTime),
                     "Du kan ikke booke et rom i fortiden.");
             }
-            
+
             if (model.EndTime <= model.StartTime)
             {
                 ModelState.AddModelError(

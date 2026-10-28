@@ -21,5 +21,24 @@ namespace StudyFlow.Controllers
 
             return View(rooms);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            var room = await _context.Rooms.FindAsync(id);
+
+            if (room == null)
+            {
+                return NotFound();
+            }
+
+            return View(room);
+        }
+
     }
 }

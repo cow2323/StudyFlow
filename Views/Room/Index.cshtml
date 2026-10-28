@@ -14,20 +14,14 @@
     </header>
 
     <section class="mb-4">
-        <form method="get"
-              asp-controller="Room"
-              asp-action="Index"
-              class="row g-3">
+        <form method="get" asp-controller="Room" asp-action="Index" class="row g-3">
 
             <div class="col-md-6">
                 <label for="searchRoom" class="form-label">
                     Search rooms
                 </label>
 
-                <input id="searchRoom"
-                       name="searchTerm"
-                       type="text"
-                       class="form-control"
+                <input id="searchRoom" name="searchTerm" type="text" class="form-control"
                        placeholder="Search room..." />
             </div>
 
@@ -36,25 +30,20 @@
                     Date
                 </label>
 
-                <input id="selectedDate"
-                       name="selectedDate"
-                       type="date"
-                       class="form-control" />
+                <input id="selectedDate" name="selectedDate" type="date" class="form-control" />
             </div>
 
             <div class="col-md-3">
-    <label for="availabilityFilter" class="form-label">
-        Availability
-    </label>
+                <label for="availabilityFilter" class="form-label">
+                    Availability
+                </label>
 
-    <select id="availabilityFilter"
-            name="availability"
-            class="form-select">
-        <option value="">All rooms</option>
-        <option value="available">Available</option>
-        <option value="unavailable">Unavailable</option>
-    </select>
-</div>
+                <select id="availabilityFilter" name="availability" class="form-select">
+                    <option value="">All rooms</option>
+                    <option value="available">Available</option>
+                    <option value="unavailable">Unavailable</option>
+                </select>
+            </div>
 
         </form>
     </section>
@@ -67,19 +56,17 @@
 
                 <div class="card h-100 shadow-sm">
                     @{
-                      var imagePath = room.Id switch
-                   {
-                      1 => "~/images/Study rooms_side/study room1.jpg",
-                      2 => "~/images/Study rooms_side/study room2.jpg",
-                      3 => "~/images/Study rooms_side/study room3.jpg",
-                      _ => "~/images/Study rooms_side/study room1.jpg"
-               };
-           }
+                        var imagePath = room.Id switch
+                        {
+                            1 => "~/images/Study rooms_side/study room1.jpg",
+                            2 => "~/images/Study rooms_side/study room2.jpg",
+                            3 => "~/images/Study rooms_side/study room3.jpg",
+                            _ => "~/images/Study rooms_side/study room1.jpg"
+                        };
+                    }
 
-                    <img src="@Url.Content(imagePath)"
-                     class="card-img-top"
-                     alt="@room.Name"
-                     style="height: 220px; object-fit: cover;" />
+                    <img src="@Url.Content(imagePath)" class="card-img-top" alt="@room.Name"
+                         style="height: 220px; object-fit: cover;" />
 
                     <div class="card-body">
 
@@ -116,11 +103,14 @@
 
                     <footer class="card-footer bg-white border-0">
 
-                        <a asp-controller="Booking"
-                           asp-action="Create"
-                           class="btn btn-primary w-100">
+                        
+                       
+                        <a asp-controller="Room" asp-action="Details" asp-route-id="@room.Id" class="btn btn-primary w-100">
+                            <i class="bi bi-eye me-2"></i>
                             View Details
                         </a>
+
+
 
                     </footer>
 
