@@ -50,14 +50,14 @@ namespace StudyFlow.Controllers
             //Get User 
 
 
-            userId = _userManager.GetUserId(User);
+            string? userId = _userManager.GetUserId(User);
             
 
            
 
            //If USer is still undefined we want user to login
 
-            if (string.isNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(userId))
             {
                 return RedirectToAction("Login", "User");
             }
