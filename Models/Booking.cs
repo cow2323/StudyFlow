@@ -13,7 +13,7 @@ namespace StudyFlow.Models
         public DateTime StartTime { get; set; }
 
         public DateTime EndTime { get; set; }
-
+        public string? Subject { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Kan være null dersom brukerdata ikke er lastet inn fra databasen.

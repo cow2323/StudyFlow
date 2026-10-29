@@ -6,8 +6,10 @@ namespace StudyFlow.Models
     {
         public StudyFlowDbContext(DbContextOptions<StudyFlowDbContext> options) : base(options)
         {
-            //  REMOVE WHEN SWITCHING TO EF CORE MIGRATIONS
-            Database.EnsureCreated(); //For early prototyping
+            
+            Database.EnsureCreated(); // early prototyping
+
+     
             
         }
 
@@ -16,6 +18,9 @@ namespace StudyFlow.Models
         public DbSet<User> Users {get; set;}
 
         public DbSet<Booking> Bookings {get; set;}
+        public DbSet<StudySession> StudySessions { get; set; }
+
+        
         public DbSet<Room> Rooms {get; set;}
         
         }
