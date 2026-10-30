@@ -1,3 +1,4 @@
+
 @{
     ViewData["Title"] = "Home";
     Layout = "_DashboardLayout";
@@ -13,7 +14,8 @@
             <!-- Left: Text -->
             <div class="col-lg-6">
 
-                <h1 class="fw-bold mb-3" style="color: #172B4D;">
+                <h1 class="fw-bold mb-3"
+                    style="color: #172B4D;">
                     Your space to study together.
                 </h1>
 
@@ -23,12 +25,14 @@
                     in one place.
                 </p>
 
-                <a asp-controller="Room" asp-action="Index" class="btn btn-primary btn-lg me-2">
-                    View Rooms
-                </a>
+                <!-- Main action -->
+                <a asp-controller="Room"
+                   asp-action="Index"
+                   class="btn btn-primary btn-lg">
 
-                <a asp-controller="Booking" asp-action="Index" class="btn btn-outline-secondary btn-lg">
-                    My Bookings
+                    <i class="bi bi-search me-2"></i>
+                    Find Rooms
+
                 </a>
 
             </div>
@@ -36,55 +40,14 @@
             <!-- Right: Image -->
             <div class="col-lg-6">
 
-                <img src="~/images/Home_side.png" alt="Modern study room"
-                     class="img-fluid rounded-4 w-100" style="height: 350px; object-fit: cover;" />
+                <img src="~/images/Home_side.png"
+                     alt="Modern study room"
+                     class="img-fluid rounded-4 w-100 object-fit-cover"
+                     style="height: 350px;" />
 
             </div>
 
         </div>
-
-    </div>
-
-    <div class="row text-center">
-
-        <div class="col-md-4 mb-3">
-            <a asp-controller="Room" asp-action="Index" class="text-decoration-none text-dark">
-
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h3 class="card-title">Find a Room</h3>
-                        <p class="card-text">
-                            Browse available study rooms and check their capacity.
-                        </p>
-                    </div>
-                </div>
-
-            </a>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h3 class="card-title">Book a Room</h3>
-                    <p class="card-text">
-                        Choose a room, date and time for your study session.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h3 class="card-title">Study Sessions</h3>
-                    <p class="card-text">
-                        Create study sessions, collaborate
-                        with other students and study together.
-                    </p>
-                </div>
-            </div>
-        </div>
-
     </div>
 
 </div>

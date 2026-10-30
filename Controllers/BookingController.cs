@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity; 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudyFlow.Models;
@@ -10,7 +10,7 @@ namespace StudyFlow.Controllers
     public class BookingController : Controller
     {
         private readonly StudyFlowDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager; 
+        private readonly UserManager<IdentityUser> _userManager;
 
         public BookingController(UserManager<IdentityUser> userManager, StudyFlowDbContext context)
         {
@@ -29,22 +29,32 @@ namespace StudyFlow.Controllers
             return View(bookings);
         }
 
+
+
         [HttpGet]
         [Authorize]
-        public IActionResult Create()
+        public IActionResult Create(int? roomId)
+
         {
+            if (!roomId.HasValue || roomId.Value <= 0)
+            {
+                return RedirectToAction("Index", "Room");
+            }
+
             return View(new BookingCreateViewModel
             {
+                RoomId = roomId.Value,
                 StartTime = DateTime.Now.AddHours(1),
                 EndTime = DateTime.Now.AddHours(2)
             });
         }
 
+
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookingCreateViewModel model)
-        {    
+        {
 
 
             //Get User 
@@ -53,9 +63,7 @@ namespace StudyFlow.Controllers
             string? userId = _userManager.GetUserId(User);
             
 
-           
 
-           //If USer is still undefined we want user to login
 
             if (string.IsNullOrEmpty(userId))
             {
@@ -67,7 +75,7 @@ namespace StudyFlow.Controllers
                     nameof(model.StartTime),
                     "Du kan ikke booke et rom i fortiden.");
             }
-            
+
             if (model.EndTime <= model.StartTime)
             {
                 ModelState.AddModelError(
