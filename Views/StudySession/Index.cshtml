@@ -1,0 +1,190 @@
+@{
+    ViewData["Title"] = "Study Sessions";
+    Layout = "_DashboardLayout";
+}
+
+<div class="container-fluid py-4">
+
+    <h1 class="fw-bold">Study Sessions</h1>
+
+    <p class="text-muted">
+        Find and join study sessions with other students.
+    </p>
+    <!-- Create Study Session Button -->
+    <a asp-controller="StudySession" asp-action="Create" class="btn btn-primary mb-4">
+        <i class="bi bi-plus-lg me-2"></i>
+        Create Study Session
+    </a>
+
+    <!-- Study Session Tabs -->
+   
+    <ul class="nav nav-underline mb-4">
+        <li class="nav-item">
+            <button type="button" id="allSessionsTab" class="nav-link active">
+                All Sessions
+            </button>
+        </li>
+
+        <li class="nav-item">
+            <button type="button" id="mySessionsTab" class="nav-link">
+                My Sessions
+            </button>
+        </li>
+    </ul>
+
+
+   
+    <!-- Search and Filter -->
+    <div class="row g-3 mb-4">
+
+        <!-- Search -->
+        <div class="col-md-9">
+            <label for="sessionSearch" class="form-label">
+                Search sessions
+            </label>
+
+            <div class="input-group">
+                <span class="input-group-text bg-white">
+                    <i class="bi bi-search"></i>
+                </span>
+
+                <input type="search" id="sessionSearch" class="form-control"
+                       placeholder="Search by course, topic or keyword..." />
+            </div>
+        </div>
+
+        <!-- Filter -->
+        <div class="col-md-3">
+            <label for="sessionFilter" class="form-label">
+                Filter
+            </label>
+
+            <select id="sessionFilter" class="form-select">
+                <option value="upcoming">Upcoming</option>
+                <option value="past">Past</option>
+                <option value="all">All</option>
+            </select>
+        </div>
+
+    </div>
+
+
+    <!-- Study Session Cards -->
+    <div id="allSessionsContent" class="row g-4">
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-body p-3 d-flex flex-column">
+
+                    <h5 class="fw-bold">Introduction to Artificial Intelligence</h5>
+
+                    <div class="mb-3">
+                        <span class="badge bg-primary">DAVE3625</span>
+                        <span class="badge bg-light text-dark">
+                            Exam preparation
+                        </span>
+                    </div>
+
+                    <p class="mb-2">
+                        <i class="bi bi-calendar3 me-2"></i>
+                        10 Nov 2026, 10:00 - 12:00
+                    </p>
+
+                    <p class="mb-2">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        Room 1
+                    </p>
+
+                    <p class="mb-3">
+                        <i class="bi bi-people me-2"></i>
+                        1/4 joined
+                    </p>
+
+                    <button class="btn btn-primary mt-auto" type="button" disabled>
+                        Join Session
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Second Study Session Card -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-body p-3 d-flex flex-column">
+
+                    <h5 class="fw-bold">Web Applications</h5>
+
+                    <div class="mb-3">
+                        <span class="badge bg-primary">ITPE3200</span>
+                        <span class="badge bg-light text-dark">
+                            Project work
+                        </span>
+                    </div>
+
+                    <p class="mb-2">
+                        <i class="bi bi-calendar3 me-2"></i>
+                        12 Nov 2026, 14:00 - 16:00
+                    </p>
+
+                    <p class="mb-2">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        Room 2
+                    </p>
+
+                    <p class="mb-3">
+                        <i class="bi bi-people me-2"></i>
+                        2/6 joined
+                    </p>
+
+                    <button type="button" class="btn btn-primary mt-auto" disabled>
+                        Join Session
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Third Study Session Card -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-body p-3 d-flex flex-column">
+
+                    <h5 class="fw-bold">Cybersecurity</h5>
+
+                    <div class="mb-3">
+                        <span class="badge bg-primary">ITPE3100</span>
+                        <span class="badge bg-light text-dark">
+                            Exam preparation
+                        </span>
+                    </div>
+
+                    <p class="mb-2">
+                        <i class="bi bi-calendar3 me-2"></i>
+                        13 Nov 2026, 10:00 - 12:00
+                    </p>
+
+                    <p class="mb-2">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        Room 3
+                    </p>
+
+                    <p class="mb-3">
+                        <i class="bi bi-people me-2"></i>
+                        1/10 joined
+                    </p>
+
+                    <button type="button" class="btn btn-primary mt-auto" disabled>
+                        Join Session
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
