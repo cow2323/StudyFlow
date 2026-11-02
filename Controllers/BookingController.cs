@@ -32,7 +32,7 @@ namespace StudyFlow.Controllers
             return View(bookings);
         }
 
-
+       
 
         [HttpGet]
         [Authorize]

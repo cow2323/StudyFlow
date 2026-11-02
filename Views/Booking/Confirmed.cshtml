@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = "Booking Confirmed";
+}
+<main class="container py-5">
+
+    <section class="mx-auto text-center" style="max-width: 520px;">
+
+        <article class="card shadow-sm border-0 p-4">
+
+            <header class="mb-4">
+
+                <span class="d-inline-flex align-items-center justify-content-center
+                             bg-success text-white rounded-circle mb-3"
+                      style="width: 70px; height: 70px; font-size: 36px;">
+                    ✓
+                </span>
+
+                <h1 class="h3 fw-bold">
+                    Booking confirmed!
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Your study room has been successfully booked.
+                </p>
+
+            </header>
+
+            <section class="bg-light rounded p-3 text-start mb-4">
+
+                <p class="mb-2">
+                    <strong>Room:</strong>
+                    Room 1
+                </p>
+
+                <p class="mb-2">
+                    <strong>Date:</strong>
+                    02.11.2026
+                </p>
+
+                <p class="mb-2">
+                    <strong>Time:</strong>
+                    10:00 - 12:00
+                </p>
+
+                <p class="mb-0">
+                    <strong>Capacity:</strong>
+                    8 people
+                </p>
+
+            </section>
+
+            <footer>
+                <a asp-controller="Booking"
+                   asp-action="Index"
+                   class="btn btn-primary w-100">
+                    View My Bookings
+                </a>
+            </footer>
+
+        </article>
+
+    </section>
+
+</main>

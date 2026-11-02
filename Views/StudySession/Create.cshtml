@@ -1,0 +1,135 @@
+@{
+    ViewData["Title"] = "Create Study Session";
+    Layout = "_DashboardLayout";
+}
+
+<div class="container-fluid py-4">
+
+    <h1 class="fw-bold">Create Study Session</h1>
+
+    <p class="text-muted mb-4">
+        Organize a study session and invite others to join.
+    </p>
+
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body p-4">
+
+            <!-- Form fields will go here -->
+
+            <!-- Room Selection -->
+            <div class="mb-3">
+                <label for="roomSelect" class="form-label fw-semibold">
+                    Room
+                </label>
+
+                <select id="roomSelect" name="RoomId" class="form-select" required>
+                    <option value="" selected disabled>Select a room</option>
+                    <option value="1">Room 1</option>
+                    <option value="2">Room 2</option>
+                    <option value="3">Room 3</option>
+                </select>
+            </div>
+
+            <!-- Date and Time -->
+            <div class="row g-3 mb-3">
+
+                <!-- Date -->
+                <div class="col-md-4">
+                    <label for="sessionDate" class="form-label fw-semibold">
+                        Date
+                    </label>
+                    <input type="date" id="sessionDate" name="Date" class="form-control" required />
+                </div>
+
+                <!-- Start Time -->
+                <div class="col-md-4">
+                    <label for="startTime" class="form-label fw-semibold">
+                        Start Time
+                    </label>
+                    <input type="time" id="startTime" name="StartTime" class="form-control" value="10:00" required />
+                </div>
+
+                <!-- End Time -->
+                <div class="col-md-4">
+                    <label for="endTime" class="form-label fw-semibold">
+                        End Time
+                    </label>
+                    <input type="time" id="endTime" name="EndTime" class="form-control" value="12:00" required />
+                </div>
+
+
+                <!-- Course and Topic -->
+                <div class="row g-3 mb-3">
+
+                    <!-- Course -->
+                    <div class="col-md-6">
+                        <label for="course" class="form-label fw-semibold">
+                            Course
+                        </label>
+
+                        <input type="text" id="course" name="Course" class="form-control" placeholder="e.g. ITPE3200"
+                               required />
+                    </div>
+
+                    <!-- Topic -->
+                    <div class="col-md-6">
+                        <label for="topic" class="form-label fw-semibold">
+                            Topic
+                        </label>
+
+                        <input type="text" id="topic" name="Topic" class="form-control" placeholder="e.g. React and MVC"
+                               required />
+                    </div>
+
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="description" class="form-label fw-semibold">
+                            Description (Optional)
+                        </label>
+
+                        <textarea id="description" name="Description" class="form-control" rows="3"
+                                  placeholder="Write a short description of your study session..."></textarea>
+                    </div>
+
+                    <!-- Session Visibility -->
+                    <div class="mb-4">
+                        <label for="isPublic" class="form-label fw-semibold">
+                            Session Visibility
+                        </label>
+
+                        <select id="isPublic" name="IsPublic" class="form-select">
+                            <option value="true">Public</option>
+                            <option value="false">Private</option>
+                        </select>
+
+                        <div class="form-text">
+                            Choose whether other students can discover this session.
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+
+                        <a asp-controller="StudySession" asp-action="Index" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+
+                        <button type="button" class="btn btn-primary" disabled>
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Create Session
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
