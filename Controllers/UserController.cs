@@ -40,7 +40,7 @@ public class UserController:Controller
 
                 //DEBUG LINE
                 Console.WriteLine("Success Reg");
-                return RedirectToAction("Index", "Home"); 
+                return RedirectToAction("Index", "Bookings"); 
             }
 
             foreach (var error in result.Errors)
@@ -70,11 +70,7 @@ public class UserController:Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
     {
-        //Default to home page if ReturnUrl is NULL or Empty
-        /*string targetUrl = !string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl)
-            ? model.ReturnUrl
-            : Url.Action("Index","Home" )?? "~/";
-*/
+       
             if (ModelState.IsValid)
         {
             var user = await  _userManager.FindByEmailAsync(model.Email);
@@ -92,8 +88,7 @@ public class UserController:Controller
             if (result.Succeeded)
             {
 
-            //DEBUG LINE
-                Console.WriteLine("Success Login");
+            
                 return RedirectToAction("Index", "Home"); 
             }}
 
@@ -101,8 +96,7 @@ public class UserController:Controller
 
             ModelState.AddModelError(string.Empty, "Invalid Login Attempt"); 
             
-            //DEBUG LINE
-            Console.WriteLine("Something wenbt wrong in login ");
+
         }
 
         return View(new AuthViewModel {Login= model, ReturnUrl = returnUrl}); 

@@ -5,12 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using StudyFlow.Models;
 using StudyFlow.ViewModels;
 
+
 namespace StudyFlow.Controllers
 {
     public class BookingController : Controller
     {
         private readonly StudyFlowDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+
+
 
         public BookingController(UserManager<IdentityUser> userManager, StudyFlowDbContext context)
         {
