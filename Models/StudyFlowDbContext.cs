@@ -23,6 +23,8 @@ namespace StudyFlow.Models
         public DbSet<Booking> Bookings {get; set;}
         public DbSet<StudySession> StudySessions { get; set; }
 
+        public DbSet<StudySessionParticipant> StudySessionParticipants { get; set; }
+
         
         public DbSet<Room> Rooms {get; set;}
         

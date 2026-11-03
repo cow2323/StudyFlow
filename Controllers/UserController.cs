@@ -38,16 +38,12 @@ public class UserController:Controller
                 await _signInManager.SignInAsync(user, isPersistent:false);
 
 
-                //DEBUG LINE
-                Console.WriteLine("Success Reg");
-                return RedirectToAction("Index", "Bookings"); 
+                
             }
 
             foreach (var error in result.Errors)
             {
 
-            //DEBUG LINE
-                Console.WriteLine(" Something wrong in registration: ");
                 ModelState.AddModelError(string.Empty, error.Description); 
             }
 

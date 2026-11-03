@@ -1,3 +1,5 @@
+@model StudyFlow.ViewModels.StudySessionViewModel
+
 @{
     ViewData["Title"] = "Create Study Session";
     Layout = "_DashboardLayout";
@@ -16,13 +18,15 @@
 
             <!-- Form fields will go here -->
 
+            <form asp-action="Create" method="post">
+
             <!-- Room Selection -->
             <div class="mb-3">
                 <label for="roomSelect" class="form-label fw-semibold">
                     Room
                 </label>
 
-                <select id="roomSelect" name="RoomId" class="form-select" required>
+                <select asp-for="RoomId" d="roomSelect" name="RoomId" class="form-select" required>
                     <option value="" selected disabled>Select a room</option>
                     <option value="1">Room 1</option>
                     <option value="2">Room 2</option>
@@ -33,20 +37,14 @@
             <!-- Date and Time -->
             <div class="row g-3 mb-3">
 
-                <!-- Date -->
-                <div class="col-md-4">
-                    <label for="sessionDate" class="form-label fw-semibold">
-                        Date
-                    </label>
-                    <input type="date" id="sessionDate" name="Date" class="form-control" required />
-                </div>
+                
 
                 <!-- Start Time -->
                 <div class="col-md-4">
                     <label for="startTime" class="form-label fw-semibold">
                         Start Time
                     </label>
-                    <input type="time" id="startTime" name="StartTime" class="form-control" value="10:00" required />
+                    <input asp-for="StartTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" step="60" required />
                 </div>
 
                 <!-- End Time -->
@@ -54,7 +52,7 @@
                     <label for="endTime" class="form-label fw-semibold">
                         End Time
                     </label>
-                    <input type="time" id="endTime" name="EndTime" class="form-control" value="12:00" required />
+                    <input asp-for="EndTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" step="60" required />
                 </div>
 
 
@@ -67,7 +65,7 @@
                             Course
                         </label>
 
-                        <input type="text" id="course" name="Course" class="form-control" placeholder="e.g. ITPE3200"
+                        <input asp-for="Course" type="text" id="course" name="Course" class="form-control" placeholder="e.g. ITPE3200"
                                required />
                     </div>
 
@@ -77,7 +75,7 @@
                             Topic
                         </label>
 
-                        <input type="text" id="topic" name="Topic" class="form-control" placeholder="e.g. React and MVC"
+                        <input asp-for="Topic" type="text" id="topic" name="Topic" class="form-control" placeholder="e.g. React and MVC"
                                required />
                     </div>
 
@@ -88,7 +86,7 @@
                             Description (Optional)
                         </label>
 
-                        <textarea id="description" name="Description" class="form-control" rows="3"
+                        <textarea asp-for="Description" id="description" name="Description" class="form-control" rows="3"
                                   placeholder="Write a short description of your study session..."></textarea>
                     </div>
 
@@ -98,7 +96,7 @@
                             Session Visibility
                         </label>
 
-                        <select id="isPublic" name="IsPublic" class="form-select">
+                        <select asp-for="IsPublic" id="isPublic" name="IsPublic" class="form-select">
                             <option value="true">Public</option>
                             <option value="false">Private</option>
                         </select>
@@ -115,7 +113,7 @@
                             Cancel
                         </a>
 
-                        <button type="button" class="btn btn-primary" disabled>
+                        <button type="submit" class="btn btn-primary">
                             <i class="bi bi-plus-circle me-2"></i>
                             Create Session
                         </button>
@@ -128,8 +126,16 @@
 
             </div>
 
+            </form>
 
         </div>
     </div>
 
 </div>
+
+@section Scripts {
+
+    <partial name= "_ValidationScriptsPartial"/>
+
+
+}
