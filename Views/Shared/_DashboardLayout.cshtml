@@ -73,6 +73,7 @@
                         My Bookings
                     </a>
 
+                    <!-- Login/out -->
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
 {
     <form asp-controller="User"
