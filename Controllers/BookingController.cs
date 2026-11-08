@@ -117,7 +117,7 @@ namespace StudyFlow.Controllers
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return View("Confirmed", "Booking");
         }
 
         [HttpGet]
