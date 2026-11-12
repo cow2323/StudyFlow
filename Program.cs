@@ -1,4 +1,6 @@
 
+using StudyFlow.DAL;
+
 using Microsoft.EntityFrameworkCore;
 using StudyFlow.Models;
 
@@ -39,7 +41,7 @@ builder.Services.AddDbContext<StudyFlowDbContext>(options => {
     options.UseSqlite(builder.Configuration["ConnectionStrings:StudyFlowDbContextConnection"]); 
     });
 
-
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options=>
 {

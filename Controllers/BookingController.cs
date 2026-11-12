@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudyFlow.Models;
 using StudyFlow.ViewModels;
+using StudyFlow.DAL;
 
 
 namespace StudyFlow.Controllers
@@ -12,13 +13,15 @@ namespace StudyFlow.Controllers
     {
         private readonly StudyFlowDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IBookingRepository _bookingRepository;
 
-
-
-        public BookingController(UserManager<IdentityUser> userManager, StudyFlowDbContext context)
+        public BookingController(UserManager<IdentityUser> userManager,
+               StudyFlowDbContext context,
+               IBookingRepository bookingRepository)
         {
             _context = context;
             _userManager = userManager;
+            _bookingRepository = bookingRepository;
         }
 
         [HttpGet]
@@ -31,8 +34,6 @@ namespace StudyFlow.Controllers
 
             return View(bookings);
         }
-
-       
 
         [HttpGet]
         [Authorize]
@@ -64,7 +65,8 @@ namespace StudyFlow.Controllers
 
 
             string? userId = _userManager.GetUserId(User);
-            
+
+
 
 
 
@@ -165,6 +167,7 @@ namespace StudyFlow.Controllers
                     nameof(Booking.RoomId),
                     "Rommet er allerede booket i dette tidsrommet.");
             }
+            ModelState.Remove(nameof(Booking.UserId));
 
             if (!ModelState.IsValid)
             {
