@@ -119,7 +119,7 @@ namespace StudyFlow.Controllers
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
-            return View("Confirmed", "Booking");
+            return View("Confirmed", booking);
         }
 
         [HttpGet]

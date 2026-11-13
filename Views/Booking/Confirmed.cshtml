@@ -1,3 +1,5 @@
+@model StudyFlow.Models.Booking
+
 @{
     ViewData["Title"] = "Booking Confirmed";
 }
@@ -27,27 +29,27 @@
 
             <section class="bg-light rounded p-3 text-start mb-4">
 
-                <p class="mb-2">
-                    <strong>Room:</strong>
-                    Room 1
-                </p>
+    <p class="mb-2">
+        <strong>Room:</strong>
+        Room @Model.RoomId
+    </p>
 
-                <p class="mb-2">
-                    <strong>Date:</strong>
-                    02.11.2026
-                </p>
+    <p class="mb-2">
+        <strong>Date:</strong>
+        @Model.StartTime.ToString("dd.MM.yyyy")
+    </p>
 
-                <p class="mb-2">
-                    <strong>Time:</strong>
-                    10:00 - 12:00
-                </p>
+    <p class="mb-2">
+        <strong>Time:</strong>
+        @Model.StartTime.ToString("HH:mm") - @Model.EndTime.ToString("HH:mm")
+    </p>
 
-                <p class="mb-0">
-                    <strong>Capacity:</strong>
-                    8 people
-                </p>
+    <p class="mb-0">
+        <strong>Capacity:</strong>
+        8 people
+    </p>
 
-            </section>
+        </section>    
 
             <footer>
                 <a asp-controller="Booking"
