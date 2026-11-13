@@ -1,4 +1,4 @@
-@model StudyFlow.Models.Booking
+@model StudyFlow.ViewModels.BookingConfirmedViewModel
 
 @{
     ViewData["Title"] = "Booking Confirmed";
@@ -12,7 +12,7 @@
             <header class="mb-4">
 
                 <span class="d-inline-flex align-items-center justify-content-center
-                             bg-success text-white rounded-circle mb-3"
+                    bg-success text-white rounded-circle mb-3"
                       style="width: 70px; height: 70px; font-size: 36px;">
                     ✓
                 </span>
@@ -29,32 +29,29 @@
 
             <section class="bg-light rounded p-3 text-start mb-4">
 
-    <p class="mb-2">
-        <strong>Room:</strong>
-        Room @Model.RoomId
-    </p>
+                <p class="mb-2">
+                    <strong>Room:</strong>
+                    Room @Model.RoomId
+                </p>
 
-    <p class="mb-2">
-        <strong>Date:</strong>
-        @Model.StartTime.ToString("dd.MM.yyyy")
-    </p>
+                <p class="mb-2">
+                    <strong>Date:</strong>
+                    @Model.StartTime.ToString("dd.MM.yyyy")
+                </p>
 
-    <p class="mb-2">
-        <strong>Time:</strong>
-        @Model.StartTime.ToString("HH:mm") - @Model.EndTime.ToString("HH:mm")
-    </p>
+                <p class="mb-2">
+                    <strong>Time:</strong>
+                    @Model.StartTime.ToString("HH:mm") - @Model.EndTime.ToString("HH:mm")
+                </p>
 
-    <p class="mb-0">
-        <strong>Capacity:</strong>
-        8 people
-    </p>
-
-        </section>    
+                <p class="mb-0">
+                    <strong>Capacity:</strong>
+                    @Model.Capacity people
+                </p>
+            </section>
 
             <footer>
-                <a asp-controller="Booking"
-                   asp-action="Index"
-                   class="btn btn-primary w-100">
+                <a asp-controller="Booking" asp-action="Index" class="btn btn-primary w-100">
                     View My Bookings
                 </a>
             </footer>

@@ -119,7 +119,22 @@ namespace StudyFlow.Controllers
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
-            return View("Confirmed", booking);
+            var room = await _context.Rooms.FindAsync(model.RoomId);
+
+            if (room == null)
+            {
+                return NotFound();
+            }
+
+            var confirmedViewModel = new BookingConfirmedViewModel
+            {
+                RoomId = booking.RoomId,
+                StartTime = booking.StartTime,
+                EndTime = booking.EndTime,
+                Capacity = room.Capacity
+            };
+
+            return View("Confirmed", confirmedViewModel);
         }
 
         [HttpGet]
