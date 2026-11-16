@@ -28,7 +28,13 @@ namespace StudyFlow.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
+
+            string? userId = _userManager.GetUserId(User);
+            if (userId == null) return  RedirectToAction("Login", "User"); 
+
+
             var bookings = await _context.Bookings
+                .Where(b => b.UserId == userId)
                 .OrderBy(b => b.StartTime)
                 .ToListAsync();
 
@@ -141,7 +147,11 @@ namespace StudyFlow.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
-            var booking = await _context.Bookings.FindAsync(id);
+                string? userId = _userManager.GetUserId(User);
+    var booking = await _context.Bookings
+        .FirstOrDefaultAsync(b => b.Id == id && b.UserId == userId);
+
+    if (booking == null) return NotFound();
 
             if (booking == null)
             {
@@ -210,7 +220,11 @@ namespace StudyFlow.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            var booking = await _context.Bookings.FindAsync(id);
+    string? userId = _userManager.GetUserId(User);
+    var booking = await _context.Bookings
+        .FirstOrDefaultAsync(b => b.Id == id && b.UserId == userId);
+
+    if (booking == null) return NotFound();
 
             if (booking != null)
             {

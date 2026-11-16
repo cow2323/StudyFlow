@@ -42,6 +42,7 @@ builder.Services.AddDbContext<StudyFlowDbContext>(options => {
     });
 
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IStudySessionRepository, StudySessionRepository>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options=>
 {

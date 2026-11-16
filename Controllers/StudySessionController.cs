@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StudyFlow.DAL;
 using StudyFlow.Models;
 using StudyFlow.ViewModels;
 
@@ -13,12 +14,17 @@ public class StudySessionController:Controller
 
     StudyFlowDbContext _context;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IStudySessionRepository _sessionRepository;
 
 
-    public StudySessionController(UserManager<IdentityUser> userManager, StudyFlowDbContext context)
+    public StudySessionController(
+        UserManager<IdentityUser> userManager,
+        StudyFlowDbContext context,
+        IStudySessionRepository sessionRepository)
     {
         _context = context;
         _userManager = userManager;
+        _sessionRepository = sessionRepository;
     }
 
 
@@ -31,11 +37,9 @@ public class StudySessionController:Controller
     public async Task<IActionResult> Index()
     {
 
-         var bookings = await _context.StudySessions
-            .OrderBy(b => b.StartTime)
-            .ToListAsync();
+        var sessions = await _sessionRepository.GetAllAsync();
 
-        return View("Index", "StudySessions");
+        return View(sessions);
     }
     
 
@@ -136,7 +140,8 @@ public class StudySessionController:Controller
             StudySessionParticipant creator = new StudySessionParticipant 
             {
                 UserId = userId,
-                Session = studySession
+                Session = studySession,
+                IsHost = true
 
 
             };
@@ -148,9 +153,15 @@ public class StudySessionController:Controller
 
             _context.Bookings.Add(booking);
 
+            studySession.Participants.Add(creator);
+
             _context.StudySessions.Add(studySession); 
 
             _context.StudySessionParticipants.Add(creator);
+
+           
+
+
  
 
 
@@ -181,110 +192,112 @@ public class StudySessionController:Controller
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(
-        int id,
-        [Bind("Id,RoomId,Course,Topic,Description,StartTime,EndTime,IsPublic")] StudySession session)
-        {
-       
-        var booking = session.BookingReference;
+       public async Task<IActionResult> Edit(int id,
+    [Bind("Id,RoomId,Course,Topic,Description,StartTime,EndTime,IsPublic,Participants")] StudySession session)
+{
+    if (id != session.Id) return NotFound();
 
+    // BookingReference is `required` but not bound, so don't let it invalidate the model
+    ModelState.Remove(nameof(StudySession.BookingReference));
+
+    if (session.EndTime <= session.StartTime)
+        ModelState.AddModelError(nameof(session.EndTime), "Sluttid må være etter starttid.");
+
+    var existing = await _context.StudySessions
+        .Include(s => s.BookingReference)
+        .FirstOrDefaultAsync(s => s.Id == id);
+    if (existing == null) return NotFound();
+
+    var host = await _context.StudySessionParticipants
+        .FirstOrDefaultAsync(p => p.IsHost && p.Session.Id == existing.Id);
+    if (_userManager.GetUserId(User) != host?.UserId) return Forbid();
+
+    bool overlap = await _context.Bookings.AnyAsync(b =>
+        b.Id != existing.BookingReference.Id &&
+        b.RoomId == session.RoomId &&
+        b.StartTime < session.EndTime &&
+        session.StartTime < b.EndTime);
+    if (overlap)
+        ModelState.AddModelError(nameof(session.RoomId), "Rommet er allerede booket i dette tidsrommet.");
+
+    if (!ModelState.IsValid) return View(session);
+
+    // Update the booking in place 
+    existing.BookingReference.RoomId = session.RoomId;
+    existing.BookingReference.StartTime = session.StartTime;
+    existing.BookingReference.EndTime = session.EndTime;
+
+    existing.RoomId = session.RoomId;
+    existing.StartTime = session.StartTime;
+    existing.EndTime = session.EndTime;
+    existing.Course = session.Course;
+    existing.Topic = session.Topic;
+    existing.Description = session.Description;
+    existing.IsPublic = session.IsPublic;
+
+    await _context.SaveChangesAsync();
+    return RedirectToAction(nameof(Index));
+}
+
+
+
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> AddUser(int id)
+    {
+
+        //Add user method for additional participants
+
+        StudySession session = await _sessionRepository.GetStudySessionById(id); 
+        string? userId = _userManager.GetUserId(User); 
+    if (id != session.Id || userId == null) return BadRequest();
+
+    foreach (StudySessionParticipant participant in _context.StudySessionParticipants)
+    //Check that participant NOT in list from before
+        {
+            if (participant.UserId.Equals(userId) && session == participant.Session) return RedirectToAction(nameof(Index));
+        }
+    
+
+    //Check capacity
+
+    Room room = await _context.Rooms.FindAsync(session.RoomId);
+    
+    if (room == null || room.Capacity <= session.Participants.Count ){
+        
+        ModelState.AddModelError(nameof(room.Capacity), "Session at full capacity");
+        return RedirectToAction(nameof(Index));}
+    
+    
+    //Cannot join if session is not public
+    if (!session.IsPublic){
+
+        ModelState.AddModelError(nameof(session.IsPublic), "Session is private"); 
+    
+        return RedirectToAction(nameof(Index));}
+
+    //Create new Participant
+    StudySessionParticipant newParticipant = new StudySessionParticipant
+        {
+            Session = session, 
+            UserId = userId,
+            IsHost = false 
+            
+        };
+    //Add Participant
+    session.Participants.Add(newParticipant
+        ); 
+
+    //Add participant to DB
+
+    _context.StudySessionParticipants.Add(newParticipant); 
+    await _context.SaveChangesAsync(); 
 
         
-
-        // Check id is found by system       
-            if (id != session.Id)
-            {
-                return NotFound();
-            }
-
-            // Check end time is after start time
-            if (session.EndTime <= session.StartTime)
-            {
-                ModelState.AddModelError(
-                    nameof(session.EndTime),
-                    "Sluttid må være etter starttid.");
-            }
-        // Make sure no existing BOOKINGs overlap
-            var overlap = await _context.Bookings.AnyAsync(b =>
-                b.Id != booking.Id &&
-                b.RoomId == booking.RoomId &&
-                b.StartTime < booking.EndTime &&
-                booking.StartTime < b.EndTime);
-
-            if (overlap)
-            {
-                ModelState.AddModelError(
-                    nameof(Booking.RoomId),
-                    "Rommet er allerede booket i dette tidsrommet.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(session);
-            }
-
-            StudySession existingBooking = await _context.StudySessions.FindAsync(id);
-
-            if (existingBooking == null)
-            {
-                return NotFound();
-            }
-
-
-
-            // Check if the user is the host of the session
-
-
-
-            StudySessionParticipant hostParticipant = await _context.StudySessionParticipants.FirstOrDefaultAsync(p => p.IsHost && p.Session.Id == existingBooking.Id);
-
-
-            if (_userManager.GetUserId(User) != hostParticipant?.UserId)
-            {
-                return Forbid();
-            }
-
-
-
-//Check if the user has changed times of booking and create new booking if necessary. 
-            if (existingBooking.StartTime != session.StartTime || existingBooking.EndTime != session.EndTime)
-        {
-            
-
-            Booking newBooking = new Booking
-            {
-                UserId = hostParticipant.UserId,
-                RoomId = session.RoomId,
-                StartTime = session.StartTime,
-                EndTime = session.EndTime
-            };
-
-
-            _context.Bookings.Remove(existingBooking.BookingReference);
-            _context.Bookings.Add(newBooking);
-        }
-
-            existingBooking.RoomId = session.RoomId;
-            existingBooking.StartTime = session.StartTime;
-            existingBooking.EndTime = session.EndTime;
-            existingBooking.Course = session.Course;
-            existingBooking.Topic = session.Topic;
-            existingBooking.Description = session.Description;
-            existingBooking.IsPublic = session.IsPublic;
-             //existingBooking.Participants = session.Participants;
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
-        }
-
-
-
-
-
-
-
-
+        return RedirectToAction(nameof(Index));
+    }
 
     }
 

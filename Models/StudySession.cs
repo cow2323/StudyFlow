@@ -1,11 +1,19 @@
+
+using System.ComponentModel.DataAnnotations.Schema;
 namespace StudyFlow.Models
+
+
 {
     public class StudySession
     {
         public int Id { get; set; }
      
-        public required virtual Booking BookingReference {get; set;} 
+     [ForeignKey(nameof(Id))]
+     public required virtual Booking BookingReference {get; set;} 
+       
         public int RoomId { get; set; }
+
+        public virtual Room? Room{get; set;}
         public string Course { get; set; } = string.Empty;
         public string Topic { get; set; } = string.Empty;
         public string? Description { get; set; }
@@ -15,7 +23,7 @@ namespace StudyFlow.Models
         
         public bool IsPublic { get; set; } = true;
 
-        //public List<StudySessionParticipant> Participants {get; set;} = new List<StudySessionParticipant>();
+        public List<StudySessionParticipant> Participants {get; set;} = new List<StudySessionParticipant>();
         
 
     }

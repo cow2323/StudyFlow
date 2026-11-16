@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
-
+using Microsoft.AspNetCore.Identity;
 namespace StudyFlow.Models
 {
     public static class DbInit
@@ -13,23 +13,29 @@ namespace StudyFlow.Models
             context.Database.EnsureDeleted(); 
             context.Database.EnsureCreated();
 
-        
+            UserManager<IdentityUser> userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-
-        /*if(!context.Users.Any()){
-
-            var users = new List<User>
+            // Seed users
+            if (!context.Users.Any())
             {
-                new User { Name = "user1", Email = "user1@users.com", PasswordHash="password" },
-                 new User { Name = "user2", Email = "user2@users.com", PasswordHash="password" },
-                 new User { Name = "user3", Email = "user3@users.com", PasswordHash="password" }            
-                 }; 
+                var users = new List<IdentityUser>
+                {
+                    new IdentityUser { UserName = "user1@users.com", Email = "user1@users.com", EmailConfirmed = true },
+                    new IdentityUser { UserName = "user2@users.com", Email = "user2@users.com", EmailConfirmed = true },
+                    new IdentityUser { UserName = "user3@users.com", Email = "user3@users.com", EmailConfirmed = true }
+                };
 
-            context.Users.AddRange(users); 
-            context.SaveChanges();
+                foreach (var user in users)
+                {
+                    // CreateAsync hashes the password and saves the user
+                    var result = userManager.CreateAsync(user, "Password123!").Result;
 
-
-        }*/
+                    if (!result.Succeeded)
+                    {
+                        throw new Exception($"Failed to create user {user.UserName}: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                    }
+                }
+            }
 
 
         if (!context.Rooms.Any())
@@ -97,6 +103,10 @@ namespace StudyFlow.Models
 
         }
     }
+    
+    
+    
+
         
         
         
