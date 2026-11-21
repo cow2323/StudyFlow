@@ -22,7 +22,7 @@
                 </label>
 
                 <input id="searchRoom" name="searchTerm" type="text" class="form-control"
-                       placeholder="Search room..." />
+                       value="@Context.Request.Query["searchTerm"]" placeholder="Search room..." />
             </div>
 
             <div class="col-md-2">

@@ -14,9 +14,25 @@ namespace StudyFlow.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(DateTime? selectedDate, TimeSpan? selectedTime)
+        public async Task<IActionResult> Index(
+    string? searchTerm,
+    DateTime? selectedDate,
+    TimeSpan? selectedTime)
         {
-            var rooms = await _context.Rooms
+            var roomsQuery = _context.Rooms.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var normalizedSearch = searchTerm
+                    .Trim()
+                    .Replace(" ", "")
+                    .ToLower();
+
+                roomsQuery = roomsQuery.Where(r =>
+                    r.Name.Replace(" ", "").ToLower().Contains(normalizedSearch) ||
+                    r.Location.ToLower().Contains(searchTerm.Trim().ToLower()));
+            }
+            var rooms = await roomsQuery
                 .OrderBy(r => r.Name)
                 .ToListAsync();
 
