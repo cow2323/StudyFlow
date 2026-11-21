@@ -53,6 +53,13 @@
                 </select>
             </div>
 
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-search me-1"></i>
+                    search
+                </button>
+            </div>
+
         </form>
     </section>
 
@@ -84,10 +91,25 @@
                                 @room.Name
                             </h2>
 
-                            <span class="badge bg-success">
-                                Available
-                            </span>
+                            @{
+                                var unavailableRoomIds =
+                                    ViewBag.UnavailableRoomIds as List<int> ?? new List<int>();
 
+                                var isUnavailable = unavailableRoomIds.Contains(room.Id);
+                            }
+
+                            @if (isUnavailable)
+                            {
+                                <span class="badge bg-danger">
+                                    Unavailable
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+                                    Available
+                                </span>
+                            }
                         </header>
 
                         <p class="mb-2">

@@ -13,11 +13,29 @@ namespace StudyFlow.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(DateTime? selectedDate, TimeSpan? selectedTime)
         {
             var rooms = await _context.Rooms
                 .OrderBy(r => r.Name)
                 .ToListAsync();
+
+            var unavailableRoomIds = new List<int>();
+
+            if (selectedDate.HasValue && selectedTime.HasValue)
+            {
+                var selectedDateTime = selectedDate.Value.Date + selectedTime.Value;
+
+                unavailableRoomIds = await _context.Bookings
+                    .Where(b =>
+                        b.StartTime <= selectedDateTime &&
+                        b.EndTime > selectedDateTime)
+                    .Select(b => b.RoomId)
+                    .Distinct()
+                    .ToListAsync();
+            }
+
+            ViewBag.UnavailableRoomIds = unavailableRoomIds;
 
             return View(rooms);
         }
