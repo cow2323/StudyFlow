@@ -15,9 +15,10 @@ namespace StudyFlow.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index(
-    string? searchTerm,
-    DateTime? selectedDate,
-    TimeSpan? selectedTime)
+     string? searchTerm,
+     DateTime? selectedDate,
+     TimeSpan? selectedTime,
+     string? availability)
         {
             var roomsQuery = _context.Rooms.AsQueryable();
 
@@ -32,9 +33,6 @@ namespace StudyFlow.Controllers
                     r.Name.Replace(" ", "").ToLower().Contains(normalizedSearch) ||
                     r.Location.ToLower().Contains(searchTerm.Trim().ToLower()));
             }
-            var rooms = await roomsQuery
-                .OrderBy(r => r.Name)
-                .ToListAsync();
 
             var unavailableRoomIds = new List<int>();
 
@@ -49,13 +47,27 @@ namespace StudyFlow.Controllers
                     .Select(b => b.RoomId)
                     .Distinct()
                     .ToListAsync();
+
+                if (availability == "available")
+                {
+                    roomsQuery = roomsQuery.Where(r =>
+                        !unavailableRoomIds.Contains(r.Id));
+                }
+                else if (availability == "unavailable")
+                {
+                    roomsQuery = roomsQuery.Where(r =>
+                        unavailableRoomIds.Contains(r.Id));
+                }
             }
+
+            var rooms = await roomsQuery
+                .OrderBy(r => r.Name)
+                .ToListAsync();
 
             ViewBag.UnavailableRoomIds = unavailableRoomIds;
 
             return View(rooms);
         }
-
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
